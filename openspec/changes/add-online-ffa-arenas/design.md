@@ -180,7 +180,7 @@ Remote identity uses callsign labels and numbered or patterned ground markers in
 
 The service receives only the ephemeral token, generated callsign, protocol/build version, input intent, and connection metadata inherently available to Railway. It requests no email, custom text, advertising identifier, fingerprint, or durable history.
 
-Per-source admission and connection limits use the explicitly configured Railway proxy boundary. An address is normalized, hashed with a random per-process salt, held only in memory, and never written to application logs. Initial bounds are four simultaneous sessions and twelve quickplay requests per minute per address. These are coarse abuse limits, not identity or bans.
+Per-source admission and connection limits use the explicitly configured Railway proxy boundary. With one trusted Railway edge hop, the service consumes Railway's documented `X-Real-IP` address; otherwise it ignores untrusted forwarding headers or evaluates the configured `X-Forwarded-For` chain. An address is normalized, hashed with a random per-process salt, held only in memory, and never written to application logs. Initial bounds are four simultaneous sessions and twelve quickplay requests per minute per address. These are coarse abuse limits, not identity or bans.
 
 Additional controls are one active socket generation per token, strict schemas, 1 KiB quickplay bodies, 8 KiB realtime messages, a 500 ms input deadman, hard process/room/entity limits, stable non-reflective error codes, and no chat, uploads, custom names, or public room identifiers.
 

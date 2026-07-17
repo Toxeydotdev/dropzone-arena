@@ -200,6 +200,7 @@ describe('HTTP authority boundary', () => {
       maxReservations: 4,
       maxRooms: 2,
       maxSessions: 4,
+      maxSessionsPerSource: 1,
       trustedProxyHops: 1,
     });
 
@@ -207,7 +208,7 @@ describe('HTTP authority boundary', () => {
     for (let index = 1; index <= 4; index += 1) {
       admissions.push(
         await quickplay(harness, undefined, WEB_ORIGIN, {
-          'X-Forwarded-For': `198.51.100.${index}`,
+          'X-Real-IP': `198.51.100.${index}`,
         }),
       );
     }
@@ -222,7 +223,7 @@ describe('HTTP authority boundary', () => {
     expect(successes[2]?.callsign).not.toBe(successes[3]?.callsign);
 
     const full = await quickplay(harness, undefined, WEB_ORIGIN, {
-      'X-Forwarded-For': '198.51.100.10',
+      'X-Real-IP': '198.51.100.10',
     });
     expect(full.response.status).toBe(503);
     expect(full.body).toMatchObject({ code: 'CAPACITY', retryable: true });
@@ -238,6 +239,29 @@ describe('HTTP authority boundary', () => {
     expect(second.body).toMatchObject({ code: 'RATE_LIMITED', retryable: true });
     expect(JSON.stringify(harness.logs)).not.toContain(token);
     expect(JSON.stringify(harness.logs)).not.toContain('127.0.0.1');
+  });
+
+  it('ignores client address headers until a proxy boundary is trusted', async () => {
+    const harness = await startHarness({
+      maxConnections: 2,
+      maxPlayersPerRoom: 2,
+      maxReservations: 2,
+      maxRooms: 1,
+      maxSessions: 2,
+      maxSessionsPerSource: 1,
+      trustedProxyHops: 0,
+    });
+
+    const first = await quickplay(harness, undefined, WEB_ORIGIN, {
+      'X-Real-IP': '198.51.100.1',
+    });
+    expect(first.response.status).toBe(200);
+
+    const second = await quickplay(harness, undefined, WEB_ORIGIN, {
+      'X-Real-IP': '198.51.100.2',
+    });
+    expect(second.response.status).toBe(429);
+    expect(second.body).toMatchObject({ code: 'RATE_LIMITED', retryable: true });
   });
 
   it('rejects realtime transport from a non-exact origin before redemption', async () => {

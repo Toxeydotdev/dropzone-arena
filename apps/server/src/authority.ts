@@ -1120,6 +1120,10 @@ export function createAuthorityServer(
   function forwardedAddressChain(request: IncomingMessage): string[] {
     const remote = normalizeAddress(request.socket.remoteAddress) ?? 'unavailable';
     if (config.trustedProxyHops === 0) return [remote];
+    if (config.trustedProxyHops === 1) {
+      const realAddress = normalizeAddress(singleHeader(request.headers['x-real-ip']));
+      if (realAddress !== undefined) return [realAddress, remote];
+    }
     const forwarded = singleHeader(request.headers['x-forwarded-for']);
     if (forwarded === undefined) return [remote];
     const addresses = forwarded

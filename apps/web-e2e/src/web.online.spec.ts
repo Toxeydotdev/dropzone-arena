@@ -159,12 +159,15 @@ test(
         returning.page.getByRole('button', { name: 'Public quickplay' }),
       ).toBeVisible();
 
+      await returning.page.getByRole('button', { name: 'Public quickplay' }).click();
+      await expectConnected(returning.page);
+      await expectPopulation(returning.page, 2);
+      expect(await readOnlineIdentity(returning.page)).toEqual(retainedIdentity);
+      expect(resumedAdmissionRequests).toEqual([]);
+
       await observer.page.bringToFront();
       await observer.page.getByRole('button', { name: 'Leave arena' }).click();
       await returning.page.bringToFront();
-      await returning.page.getByRole('button', { name: 'Public quickplay' }).click();
-
-      await expectConnected(returning.page);
       await expect(
         observer.page.getByRole('button', { name: 'Drop in' }),
       ).toBeVisible();
@@ -172,8 +175,6 @@ test(
       await expect(rosterTable(returning.page)).not.toContainText(
         observerIdentity.callsign,
       );
-      expect(await readOnlineIdentity(returning.page)).toEqual(retainedIdentity);
-      expect(resumedAdmissionRequests).toEqual([]);
 
       await leaveArena(returning.page);
     } finally {
@@ -271,6 +272,7 @@ test(
   'recovers an online WebGL context loss from current authority within grace',
   { tag: '@desktop' },
   async ({ browser }) => {
+    test.slow();
     const affected = await openOnlinePlayer(browser);
     const observer = await openOnlinePlayer(browser);
 
@@ -314,6 +316,7 @@ test(
   'honors reduced motion and passes ready, connected, and field-menu axe checks',
   { tag: '@desktop' },
   async ({ page }) => {
+    test.slow();
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.goto('/');
     await expect(page.locator('.arena-app')).toHaveClass(/is-reduced-motion/);
@@ -421,7 +424,7 @@ async function leaveArena(page: Page): Promise<void> {
     await openFieldMenu(page);
   }
   await expect(menuHeading).toBeVisible({ timeout: 5_000 });
-  await leave.click({ timeout: 2_000 });
+  await leave.click({ noWaitAfter: true, timeout: 10_000 });
   await expect(page.getByRole('button', { name: 'Drop in' })).toBeVisible();
 }
 

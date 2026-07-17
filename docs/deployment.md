@@ -131,12 +131,14 @@ reconnect windows, 1 KiB quickplay body, 8 KiB inbound messages, eight players,
 ### Trusted Proxy Boundary
 
 Per-source controls select an address from the normalized forwarding chain, then
-HMAC it with a random per-process salt. `TRUSTED_PROXY_HOPS=0` ignores
-`X-Forwarded-For` and is the safe anti-spoofing default, but a proxy may then make
-many players appear as one source. A value of `1` or `2` is safe only after the
-actual Railway edge chain and header replacement behavior are verified. Record
-that evidence before changing the value; never guess a hop count or trust a
-client-appended address.
+HMAC it with a random per-process salt. `TRUSTED_PROXY_HOPS=0` ignores forwarded
+address headers and is the safe anti-spoofing default, but a proxy may then make
+many players appear as one source. For one explicitly trusted hop, the authority
+prefers Railway's documented `X-Real-IP` header and otherwise evaluates
+`X-Forwarded-For`; deeper chains use `X-Forwarded-For`. A value of `1` or `2` is
+safe only after the actual Railway edge chain and header replacement behavior are
+verified. Record that evidence before changing the value; never guess a hop count
+or trust a client-appended address.
 
 These controls are coarse abuse bounds, not identity or bans. Shared households,
 schools, workplaces, carriers, and VPN exits can share a source and receive a
