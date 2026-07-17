@@ -1,0 +1,77 @@
+{
+  "name": "@dropzone-arena/source",
+  "version": "0.0.0",
+  "private": true,
+  "description": "A fast, browser-based arena shooter built for instant drop-in runs.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "nx run web:serve",
+    "build": "nx run-many --target=build --all --exclude=workspace,web-e2e --outputStyle=static",
+    "typecheck": "nx run-many --target=typecheck --all --exclude=workspace --outputStyle=static",
+    "test": "nx run-many --target=test --all --exclude=workspace,web-e2e --outputStyle=static",
+    "e2e": "nx run web-e2e:e2e --outputStyle=static",
+    "lint": "nx run workspace:lint --outputStyle=static",
+    "lint:fix": "oxlint . --ignore-path=.oxlintignore --fix --deny-warnings",
+    "format": "oxfmt --ignore-path=.oxfmtignore .",
+    "format:check": "nx run workspace:format-check --outputStyle=static",
+    "spec:check": "nx run workspace:spec-check --outputStyle=static",
+    "check:quick": "npm run format:check && npm run lint && npm run typecheck && npm run test && npm run spec:check",
+    "check": "npm run check:quick && npm run build && npm run e2e",
+    "deploy:smoke": "node tools/deployment/smoke.mjs",
+    "deploy:load": "node tools/deployment/load.mjs",
+    "graph": "nx graph"
+  },
+  "dependencies": {
+    "react": "19.2.7",
+    "react-dom": "19.2.7",
+    "socket.io": "4.8.3",
+    "socket.io-client": "4.8.3",
+    "three": "0.185.1",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.12.1",
+    "@fission-ai/openspec": "1.6.0",
+    "@nx/devkit": "23.1.0",
+    "@nx/js": "23.1.0",
+    "@nx/playwright": "23.1.0",
+    "@nx/react": "23.1.0",
+    "@nx/vite": "23.1.0",
+    "@nx/vitest": "23.1.0",
+    "@playwright/test": "1.61.1",
+    "@testing-library/dom": "10.4.0",
+    "@testing-library/react": "16.3.0",
+    "@testing-library/user-event": "14.6.1",
+    "@types/node": "24.10.4",
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3",
+    "@types/three": "0.185.1",
+    "@vitejs/plugin-react": "6.0.3",
+    "@vitest/coverage-v8": "4.1.10",
+    "jsdom": "29.1.1",
+    "nx": "23.1.0",
+    "oxfmt": "0.59.0",
+    "oxlint": "1.74.0",
+    "typescript": "6.0.3",
+    "vite": "8.1.4",
+    "vitest": "4.1.10"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "npm",
+      "version": "11.9.0",
+      "onFail": "error"
+    },
+    "runtime": {
+      "name": "node",
+      "version": "24.14.0",
+      "onFail": "error"
+    }
+  },
+  "engines": {
+    "node": "24.14.x",
+    "npm": "11.9.x"
+  },
+  "packageManager": "npm@11.9.0"
+}

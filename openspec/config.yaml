@@ -1,0 +1,32 @@
+schema: spec-driven
+
+context: |
+  Dropzone Arena is a static browser arena shooter for immediate, short solo
+  runs against deterministic bots. It has no account, backend, lobby,
+  monetization, telemetry, or persistent identity in the foundation release.
+
+  The Nx workspace uses pinned Node 24, npm 11, TypeScript 6, React 19, Vite 8,
+  Three.js, Vitest, Playwright, oxlint, and oxfmt. The browser shell imports the
+  arena client. The arena client owns React composition, input, and rendering.
+  The arena engine is a pure fixed-step simulation over explicit input, elapsed
+  time, and a seeded random state.
+
+  The visual direction is Signal Yard: near-black asphalt, safety lime, hot
+  coral, cool instrument blue, condensed operational typography, painted arena
+  markings, and broadcast-style HUD labeling. Status cannot rely on color
+  alone. Desktop and touch layouts, keyboard operation, reduced motion, visible
+  focus, safe areas, and readable failure states are required.
+
+rules:
+  proposal:
+    - Include explicit non-goals, gameplay impact, and documentation impact.
+    - State whether behavior belongs to the pure engine, browser runtime, React shell, or test harness.
+  design:
+    - Record deterministic seams, frame and lifecycle behavior, accessibility, failure behavior, and performance bounds.
+    - Keep per-frame state out of React and browser APIs out of the engine.
+  specs:
+    - Express requirements as observable behavior with WHEN/THEN scenarios.
+    - Cover keyboard, touch, pause/resume, reduced motion, responsive layout, and renderer failure where relevant.
+  tasks:
+    - Order work from pure simulation through runtime, shell, tests, documentation, and the complete check gate.
+    - Give every material task an observable verification step.

@@ -1,0 +1,33 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "arena-client",
+  "projectType": "library",
+  "sourceRoot": "libs/arena-client/src",
+  "tags": ["scope:shared", "type:game-client", "platform:browser"],
+  "targets": {
+    "test": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/coverage/libs/arena-client"],
+      "options": {
+        "cwd": "libs/arena-client",
+        "command": "vitest run"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "tsc --noEmit -p libs/arena-client/tsconfig.lib.json",
+          "tsc --noEmit -p libs/arena-client/tsconfig.spec.json"
+        ],
+        "parallel": false
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "oxlint libs/arena-client --deny-warnings"
+      }
+    }
+  }
+}

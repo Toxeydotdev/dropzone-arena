@@ -1,0 +1,21 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": ["AGENTS.md"],
+  "references": {
+    "project-docs": {
+      "path": "docs",
+      "description": "Current Dropzone Arena architecture, visual system, testing, and quality guidance."
+    },
+    "project-specs": {
+      "path": "openspec",
+      "description": "Current behavioral specifications and active change packages."
+    }
+  },
+  "mcp": {
+    "nx-mcp": {
+      "type": "local",
+      "command": ["npm", "exec", "nx", "--", "mcp"],
+      "enabled": true
+    }
+  }
+}

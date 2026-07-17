@@ -1,0 +1,52 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": [
+    "typescript",
+    "unicorn",
+    "oxc",
+    "import",
+    "react",
+    "jsx-a11y",
+    "vitest",
+    "node"
+  ],
+  "categories": {
+    "correctness": "error"
+  },
+  "options": {
+    "reportUnusedDisableDirectives": "error"
+  },
+  "rules": {
+    "eqeqeq": "error",
+    "no-debugger": "error",
+    "typescript/consistent-type-imports": "error"
+  },
+  "env": {
+    "builtin": true
+  },
+  "overrides": [
+    {
+      "files": ["apps/web/src/**/*.{ts,tsx}", "libs/arena-client/src/**/*.{ts,tsx}"],
+      "env": {
+        "browser": true
+      }
+    },
+    {
+      "files": ["**/*.{spec,test}.{ts,tsx}"],
+      "env": {
+        "vitest": true
+      }
+    },
+    {
+      "files": [
+        "tools/**/*.mjs",
+        "**/*.{config,preset}.{js,ts,mts,cts}",
+        "apps/server/**/*.ts",
+        "apps/web-e2e/**/*.ts"
+      ],
+      "env": {
+        "node": true
+      }
+    }
+  ]
+}

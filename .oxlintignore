@@ -1,0 +1,9 @@
+.agents/**
+.claude/**
+.codex/**
+.cursor/**
+.gemini/**
+.opencode/**
+.github/agents/**
+.github/prompts/**
+.github/skills/**

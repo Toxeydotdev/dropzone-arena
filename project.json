@@ -1,0 +1,43 @@
+{
+  "$schema": "node_modules/nx/schemas/project-schema.json",
+  "name": "workspace",
+  "projectType": "application",
+  "targets": {
+    "lint": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "dependsOn": ["boundaries"],
+      "inputs": ["default", { "externalDependencies": ["oxlint"] }],
+      "options": {
+        "command": "oxlint . --ignore-path=.oxlintignore --deny-warnings"
+      }
+    },
+    "boundaries": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "inputs": ["default", { "externalDependencies": ["@nx/devkit"] }],
+      "options": {
+        "command": "node tools/check-project-boundaries.mjs"
+      }
+    },
+    "format-check": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "inputs": ["default", { "externalDependencies": ["oxfmt"] }],
+      "options": {
+        "command": "oxfmt --ignore-path=.oxfmtignore --check ."
+      }
+    },
+    "spec-check": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "inputs": [
+        "{workspaceRoot}/openspec/**/*",
+        { "externalDependencies": ["@fission-ai/openspec"] }
+      ],
+      "options": {
+        "command": "openspec validate --all --strict"
+      }
+    }
+  }
+}

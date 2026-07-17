@@ -1,0 +1,51 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "web-e2e",
+  "projectType": "application",
+  "sourceRoot": "apps/web-e2e/src",
+  "tags": ["scope:web", "type:e2e"],
+  "implicitDependencies": ["server", "web"],
+  "targets": {
+    "e2e": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "parallelism": false,
+      "dependsOn": [
+        {
+          "target": "build-e2e",
+          "projects": "web",
+          "params": "ignore"
+        },
+        {
+          "target": "build",
+          "projects": "server",
+          "params": "ignore"
+        }
+      ],
+      "inputs": ["default", "^production", "{workspaceRoot}/package-lock.json"],
+      "outputs": [
+        "{workspaceRoot}/dist/.playwright/apps/web-e2e/test-output",
+        "{workspaceRoot}/dist/.playwright/apps/web-e2e/playwright-report"
+      ],
+      "options": {
+        "command": "playwright test",
+        "cwd": "apps/web-e2e",
+        "env": {
+          "BASE_URL": "http://localhost:4301"
+        }
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "tsc --noEmit -p apps/web-e2e/tsconfig.json"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "oxlint apps/web-e2e --deny-warnings"
+      }
+    }
+  }
+}

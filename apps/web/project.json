@@ -1,0 +1,89 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "web",
+  "projectType": "application",
+  "sourceRoot": "apps/web/src",
+  "tags": ["scope:web", "type:app", "platform:browser"],
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{options.outputPath}"],
+      "inputs": [
+        "production",
+        "^production",
+        "{workspaceRoot}/tools/deployment/metadata.mjs",
+        "{workspaceRoot}/tools/deployment/metadata.d.mts",
+        { "externalDependencies": ["@vitejs/plugin-react", "vite"] },
+        { "env": "DEPLOYMENT_CONFIGURATION_ID" },
+        { "env": "DEPLOYMENT_RELEASE" },
+        { "env": "DEPLOYMENT_SOURCE_REVISION" },
+        { "env": "VITE_ONLINE_ENABLED" },
+        { "env": "VITE_ONLINE_AUTHORITY_URL" },
+        { "env": "VITE_BUILD_ID" }
+      ],
+      "options": {
+        "cwd": "apps/web",
+        "command": "vite build",
+        "forwardAllArgs": false,
+        "outputPath": "dist/apps/web"
+      }
+    },
+    "build-e2e": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "dependsOn": ["^build"],
+      "outputs": ["{options.outputPath}"],
+      "inputs": [
+        "production",
+        "^production",
+        "{workspaceRoot}/tools/deployment/metadata.mjs",
+        "{workspaceRoot}/tools/deployment/metadata.d.mts",
+        { "externalDependencies": ["@vitejs/plugin-react", "vite"] },
+        { "env": "DEPLOYMENT_CONFIGURATION_ID" },
+        { "env": "DEPLOYMENT_RELEASE" },
+        { "env": "DEPLOYMENT_SOURCE_REVISION" },
+        { "env": "VITE_ONLINE_ENABLED" },
+        { "env": "VITE_ONLINE_AUTHORITY_URL" },
+        { "env": "VITE_BUILD_ID" }
+      ],
+      "options": {
+        "cwd": "apps/web",
+        "command": "vite build --mode e2e",
+        "forwardAllArgs": false,
+        "outputPath": "dist/apps/web"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "continuous": true,
+      "options": {
+        "cwd": "apps/web",
+        "command": "vite"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/coverage/apps/web"],
+      "options": {
+        "cwd": "apps/web",
+        "command": "vitest run"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "tsc --noEmit -p apps/web/tsconfig.app.json",
+          "tsc --noEmit -p apps/web/tsconfig.spec.json"
+        ],
+        "parallel": false
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "oxlint apps/web --deny-warnings"
+      }
+    }
+  }
+}

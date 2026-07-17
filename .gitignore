@@ -1,0 +1,32 @@
+# compiled output
+dist
+tmp
+out-tsc
+coverage
+playwright-report
+test-results
+
+# dependencies and caches
+node_modules
+.nx/cache
+.nx/workspace-data
+.nx/polygraph
+.nx/self-healing
+.nx/migrate-runs
+
+# local environment
+.env
+.env.local
+.env.*.local
+
+# editors and system files
+/.idea
+.vscode/*
+!.vscode/settings.json
+.DS_Store
+Thumbs.db
+*.sublime-workspace
+
+# logs
+npm-debug.log
+yarn-error.log

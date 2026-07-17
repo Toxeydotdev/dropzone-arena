@@ -1,0 +1,33 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "arena-engine",
+  "projectType": "library",
+  "sourceRoot": "libs/arena-engine/src",
+  "tags": ["scope:shared", "type:engine", "platform:neutral"],
+  "targets": {
+    "test": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/coverage/libs/arena-engine"],
+      "options": {
+        "cwd": "libs/arena-engine",
+        "command": "vitest run"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "tsc --noEmit -p libs/arena-engine/tsconfig.lib.json",
+          "tsc --noEmit -p libs/arena-engine/tsconfig.spec.json"
+        ],
+        "parallel": false
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "oxlint libs/arena-engine --deny-warnings"
+      }
+    }
+  }
+}

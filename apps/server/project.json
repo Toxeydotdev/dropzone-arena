@@ -1,0 +1,57 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "server",
+  "projectType": "application",
+  "sourceRoot": "apps/server/src",
+  "tags": ["scope:server", "type:app", "platform:node"],
+  "implicitDependencies": ["arena-engine", "arena-protocol"],
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{options.outputPath}"],
+      "inputs": [
+        "production",
+        "^production",
+        "{workspaceRoot}/tools/deployment/metadata.mjs",
+        "{workspaceRoot}/tools/deployment/metadata.d.mts",
+        { "externalDependencies": ["vite"] },
+        { "env": "ALLOWED_WEB_ORIGINS" },
+        { "env": "BUILD_ID" },
+        { "env": "DEPLOYMENT_CONFIGURATION_ID" },
+        { "env": "DEPLOYMENT_RELEASE" },
+        { "env": "DEPLOYMENT_SOURCE_REVISION" }
+      ],
+      "options": {
+        "cwd": "apps/server",
+        "command": "vite build",
+        "forwardAllArgs": false,
+        "outputPath": "dist/apps/server"
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "inputs": ["default", "^production", "{workspaceRoot}/tools/deployment/**/*"],
+      "outputs": ["{workspaceRoot}/coverage/apps/server"],
+      "options": {
+        "cwd": "apps/server",
+        "command": "vitest run"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "tsc --noEmit -p apps/server/tsconfig.app.json",
+          "tsc --noEmit -p apps/server/tsconfig.spec.json"
+        ],
+        "parallel": false
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "oxlint apps/server --deny-warnings"
+      }
+    }
+  }
+}

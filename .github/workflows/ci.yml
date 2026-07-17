@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deterministic-checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CI: true
+      OPENSPEC_TELEMETRY: 0
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up Node
+        uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Run deterministic checks
+        run: npm run check
+
+      - name: Upload Playwright failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-diagnostics-${{ github.event_name }}-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            dist/.playwright/apps/web-e2e/test-output
+            dist/.playwright/apps/web-e2e/playwright-report
+          if-no-files-found: ignore
+          include-hidden-files: true
+          retention-days: 7
+
+      - name: Build CI-only non-promotable release-shaped pair
+        env:
+          ALLOWED_WEB_ORIGINS: https://ci-web.invalid
+          BUILD_ID: ${{ github.sha }}
+          DEPLOYMENT_CONFIGURATION_ID: ci-unresolved-origins
+          DEPLOYMENT_RELEASE: 'true'
+          DEPLOYMENT_SOURCE_REVISION: ${{ github.sha }}
+          VITE_BUILD_ID: ${{ github.sha }}
+          VITE_ONLINE_AUTHORITY_URL: https://ci-authority.invalid
+          VITE_ONLINE_ENABLED: 'true'
+        run: npm exec nx -- run-many --target=build --projects=web,server --skip-nx-cache --outputStyle=static
+
+      - name: Require CI evidence files
+        run: |
+          test -f dist/apps/web/index.html
+          test -f dist/apps/web/deployment.json
+          test -f dist/apps/server/main.js
+          test -f dist/apps/server/deployment.json
+
+      - name: Upload CI-only non-promotable release-shaped pair
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-only-non-promotable-pair-${{ github.event_name }}-${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            dist/apps/web
+            dist/apps/server
+          if-no-files-found: error
+          retention-days: 7
