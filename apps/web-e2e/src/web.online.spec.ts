@@ -299,11 +299,13 @@ test(
       await expectPopulation(observer.page, 2);
       await expect(rosterTable(observer.page)).toContainText(retainedIdentity.callsign);
 
-      await leaveArena(observer.page);
       await affected.page.getByRole('button', { name: 'Retry renderer' }).click();
       await expectConnected(affected.page);
-      await expectPopulation(affected.page, 1);
       expect(await readOnlineIdentity(affected.page)).toEqual(retainedIdentity);
+
+      await leaveArena(observer.page);
+      await affected.page.bringToFront();
+      await expectPopulation(affected.page, 1);
       await leaveArena(affected.page);
     } finally {
       await closeOnlinePlayer(observer);
