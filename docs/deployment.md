@@ -212,6 +212,9 @@ configured capacity if timing, memory, snapshot, or egress evidence fails.
 
 ## Evidence Record
 
+The initial production record is
+[`production-evidence-2026-07-17.md`](./production-evidence-2026-07-17.md).
+
 For every promoted pair, retain public, non-secret evidence for:
 
 - repository and full source revision;
