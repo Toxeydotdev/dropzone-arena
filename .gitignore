@@ -8,6 +8,7 @@ test-results
 
 # dependencies and caches
 node_modules
+.netlify
 .nx/cache
 .nx/workspace-data
 .nx/polygraph

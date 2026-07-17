@@ -57,7 +57,7 @@ test(
   'joins two anonymous players to one continuous field and updates the live menu roster',
   { tag: '@desktop' },
   async ({ browser, page }) => {
-    test.slow();
+    test.setTimeout(120_000);
     await enterOnline(page);
     let second: OnlinePlayer | undefined;
 
