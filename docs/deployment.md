@@ -32,7 +32,9 @@ root and locked dependencies.
 Netlify caches `/assets/*` as immutable for one year. `/`, `/index.html`, and
 `/deployment.json` must revalidate. Railway binds `0.0.0.0:$PORT`, checks
 `/api/health`, runs one replica without sleep, and uses the bounded on-failure
-restart policy from `railway.json`.
+restart policy from `railway.json`. Railway watch paths cover authority-affecting
+root, server, engine, protocol, and deployment-tool sources so browser-only,
+end-to-end-test, and documentation commits do not replace the running authority.
 
 Provider UI settings must agree with committed configuration. Record any setting
 the provider applies outside these files, including source repository, branch or

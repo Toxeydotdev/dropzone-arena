@@ -62,6 +62,6 @@
 ## 10. Repository And Production Promotion
 
 - [x] 10.1 Re-authenticate GitHub CLI, inspect the complete initial diff for secrets, create the public `Toxeydotdev/dropzone-arena` repository, commit the passing worktree, and push `main` without bypassing CI.
-- [ ] 10.2 Create and configure one Railway service with validated production variables, exact Netlify origin, one non-sleeping replica, public TLS domain, and admission initially disabled; deploy and verify readiness.
+- [x] 10.2 Create and configure one Railway service with validated production variables, exact Netlify origin, one non-sleeping replica, public TLS domain, and admission initially disabled; deploy and verify readiness.
 - [ ] 10.3 Create and configure the Netlify site with the Railway public authority URL and exact build identity, enable Railway admission, deploy the compatible pair, and run deployed smoke plus representative load validation.
 - [ ] 10.4 Record the repository URL, public game URL, Railway service/deployment identity, Netlify deployment identity, source commit, protocol, provider configuration, validation evidence, and first-deploy rollback/containment path without recording credentials.
